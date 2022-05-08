@@ -20,11 +20,8 @@ import static burp.utils.Constants.*;
 
 public final class Utilities {
     private static final Pattern FILE_NAME_REGEX = Pattern.compile("(.*)\\.(.*)");
-    private PrintWriter stdout;
 
     private Utilities() {
-        
-            PrintWriter stdout = new PrintWriter(callbacks.getStdout(),true);
     }
 
     private static final IBurpExtenderCallbacks callbacks = BurpExtender.getCallbacks();
@@ -149,6 +146,7 @@ public final class Utilities {
             String severity,
             String confidence
     ) {
+        PrintWriter stdout = new PrintWriter(callbacks.getStdout(),true);
         stdout.println("-------------------------------------------------------");
         String issue = new String("URL: "+helpers.analyzeRequest(baseRequestResponse).getUrl().toString()+"\r\nIssue Name: "+issueName+"\r\nDescription: "+description+"\r\nSeverity: "+severity+"\r\nConfidence: "+confidence);
         stdout.println(issue);
