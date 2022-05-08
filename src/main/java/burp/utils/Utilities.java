@@ -148,7 +148,7 @@ public final class Utilities {
     ) {
         PrintWriter stdout = new PrintWriter(callbacks.getStdout(),true);
         stdout.println("-------------------------------------------------------");
-        String issue = new String("URL: "+helpers.analyzeRequest(baseRequestResponse).getUrl().toString()+"\r\nIssue Name: "+issueName+"\r\nDescription: "+description+"\r\nSeverity: "+severity+"\r\nConfidence: "+confidence);
+        String issue = new String(issueHighlight+"\r\n"+"URL: "+helpers.analyzeRequest(baseRequestResponse).getUrl().toString()+"\r\nIssue Name: "+issueName+"\r\nDescription: "+description+"\r\nSeverity: "+severity+"\r\nConfidence: "+confidence);
         stdout.println(issue);
         stdout.println("-------------------------------------------------------");
         /*
