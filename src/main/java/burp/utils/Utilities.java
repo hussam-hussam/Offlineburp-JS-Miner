@@ -145,7 +145,8 @@ public final class Utilities {
             String severity,
             String confidence
     ) {
-        String issue = "URL: "+helpers.analyzeRequest(baseRequestResponse).getUrl().toString()+"\r\nIssue Name: "+issueName+"\r\nDescription: "+description+"\r\nSeverity: "+severity+"\r\nConfidence: "+confidence;
+        System.out.println("-------------------------------------------------------");
+        String issue = new String("URL: "+helpers.analyzeRequest(baseRequestResponse).getUrl().toString()+"\r\nIssue Name: "+issueName+"\r\nDescription: "+description+"\r\nSeverity: "+severity+"\r\nConfidence: "+confidence);
         System.out.println(issue);
         System.out.println("-------------------------------------------------------");
         /*
