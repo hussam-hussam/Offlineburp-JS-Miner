@@ -24,11 +24,12 @@ public class Endpoints implements Runnable {
     private static final IExtensionHelpers helpers = callbacks.getHelpers();
     private final IHttpRequestResponse baseRequestResponse;
     private final UUID taskUUID;
-    private PrintWriter stdout=new PrintWriter(callbacks.getStdout(),true);
+    private PrintWriter stdout;
 
     public Endpoints(IHttpRequestResponse baseRequestResponse, UUID taskUUID) {
         this.baseRequestResponse = baseRequestResponse;
         this.taskUUID = taskUUID;
+        stdout=new PrintWriter(callbacks.getStdout(),true);
     }
 
     @Override
