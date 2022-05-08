@@ -60,6 +60,7 @@ public class Endpoints implements Runnable {
     }
 
     private static void reportFinding(IHttpRequestResponse baseRequestResponse, StringBuilder allMatchesSB, List<byte[]> uniqueMatches, String method) {
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>kkkkkkkkkkkkkkkkkkkkk");
         if (allMatchesSB.length() > 0) {
             // Get markers of found Cloud URL Matches
             List<int[]> allMatchesMarkers = Utilities.getMatches(baseRequestResponse.getResponse(), uniqueMatches);
