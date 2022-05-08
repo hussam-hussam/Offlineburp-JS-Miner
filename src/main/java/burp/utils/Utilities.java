@@ -2,6 +2,7 @@ package burp.utils;
 
 import burp.*;
 
+import java.io.PrintWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -21,6 +22,8 @@ public final class Utilities {
     private static final Pattern FILE_NAME_REGEX = Pattern.compile("(.*)\\.(.*)");
 
     private Utilities() {
+        
+            PrintWriter stdout = new PrintWriter(callbacks.getStdout(),true);
     }
 
     private static final IBurpExtenderCallbacks callbacks = BurpExtender.getCallbacks();
@@ -145,10 +148,10 @@ public final class Utilities {
             String severity,
             String confidence
     ) {
-        System.out.println("-------------------------------------------------------");
+        stdout.println("-------------------------------------------------------");
         String issue = new String("URL: "+helpers.analyzeRequest(baseRequestResponse).getUrl().toString()+"\r\nIssue Name: "+issueName+"\r\nDescription: "+description+"\r\nSeverity: "+severity+"\r\nConfidence: "+confidence);
-        System.out.println(issue);
-        System.out.println("-------------------------------------------------------");
+        stdout.println(issue);
+        stdout.println("-------------------------------------------------------");
         /*
         IScanIssue newCustomIssue = new CustomScanIssue(
                 baseRequestResponse.getHttpService(),
