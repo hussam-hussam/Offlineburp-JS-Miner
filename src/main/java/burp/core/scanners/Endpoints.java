@@ -65,6 +65,7 @@ public class Endpoints implements Runnable {
             List<int[]> allMatchesMarkers = Utilities.getMatches(baseRequestResponse.getResponse(), uniqueMatches);
 
             // report the issue
+            System.out.println(">>>>>>>>>>>>>>here we go");
             sendNewIssue(baseRequestResponse,
                     "[JS Miner] API Endpoints (" + method + ")",
                     "The following API endpoints were found in a static file.",
