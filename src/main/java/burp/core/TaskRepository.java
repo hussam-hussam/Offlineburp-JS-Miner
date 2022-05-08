@@ -27,7 +27,7 @@ public class TaskRepository {
 
     public void addTask(Task task) {
         getTasks().add(task);
-        logTask(task);
+        //logTask(task);
     }
 
     public boolean notDuplicate(TaskName taskName, String url, byte[] hash) {
