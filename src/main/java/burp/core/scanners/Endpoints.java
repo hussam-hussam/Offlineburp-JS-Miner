@@ -24,12 +24,10 @@ public class Endpoints implements Runnable {
     private static final IExtensionHelpers helpers = callbacks.getHelpers();
     private final IHttpRequestResponse baseRequestResponse;
     private final UUID taskUUID;
-    private PrintWriter stdout;
 
     public Endpoints(IHttpRequestResponse baseRequestResponse, UUID taskUUID) {
         this.baseRequestResponse = baseRequestResponse;
         this.taskUUID = taskUUID;
-        stdout=new PrintWriter(callbacks.getStdout(),true);
     }
 
     @Override
@@ -63,7 +61,9 @@ public class Endpoints implements Runnable {
     }
 
     private static void reportFinding(IHttpRequestResponse baseRequestResponse, StringBuilder allMatchesSB, List<byte[]> uniqueMatches, String method) {
-        stdout.println(">>>>>>>>>>>>>>>>>>>>>>>>>kkkkkkkkkkkkkkkkkkkkk");
+        
+        
+        new PrintWriter(callbacks.getStdout(),true).println(">>>>>>>>>>>>>>>>>>>>>>>>>kkkkkkkkkkkkkkkkkkkkk");
         if (allMatchesSB.length() > 0) {
             // Get markers of found Cloud URL Matches
             List<int[]> allMatchesMarkers = Utilities.getMatches(baseRequestResponse.getResponse(), uniqueMatches);
