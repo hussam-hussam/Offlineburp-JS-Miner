@@ -20,6 +20,7 @@ import static burp.utils.Constants.*;
 
 public final class Utilities {
     private static final Pattern FILE_NAME_REGEX = Pattern.compile("(.*)\\.(.*)");
+    private PrintWriter stdout;
 
     private Utilities() {
         
