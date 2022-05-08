@@ -35,7 +35,7 @@ public class Endpoints implements Runnable {
         BurpExtender.getTaskRepository().startTask(taskUUID);
         // For readability, reporting each method separately, maybe I'll combine them in the future into one burp issue.
         endpointsFinder(ENDPOINTS_GET_REGEX, "get");
-        endpointsFinder(ENDPOINTS_POST_REGEX, "post");
+        endpointsFinder(ENDPOINTS_POST_REGEX, "POST");
         endpointsFinder(ENDPOINTS_PUT_REGEX, "put");
         endpointsFinder(ENDPOINTS_DELETE_REGEX, "delete");
         endpointsFinder(ENDPOINTS_PATCH_REGEX, "patch");
