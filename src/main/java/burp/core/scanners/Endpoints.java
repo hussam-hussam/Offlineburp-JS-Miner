@@ -1,5 +1,6 @@
 package burp.core.scanners;
 
+import java.io.PrintWriter;
 import burp.BurpExtender;
 import burp.IBurpExtenderCallbacks;
 import burp.IExtensionHelpers;
@@ -23,6 +24,7 @@ public class Endpoints implements Runnable {
     private static final IExtensionHelpers helpers = callbacks.getHelpers();
     private final IHttpRequestResponse baseRequestResponse;
     private final UUID taskUUID;
+    private PrintWriter stdout=new PrintWriter(callbacks.getStdout(),true);
 
     public Endpoints(IHttpRequestResponse baseRequestResponse, UUID taskUUID) {
         this.baseRequestResponse = baseRequestResponse;
@@ -60,13 +62,12 @@ public class Endpoints implements Runnable {
     }
 
     private static void reportFinding(IHttpRequestResponse baseRequestResponse, StringBuilder allMatchesSB, List<byte[]> uniqueMatches, String method) {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>kkkkkkkkkkkkkkkkkkkkk");
+        stdout.println(">>>>>>>>>>>>>>>>>>>>>>>>>kkkkkkkkkkkkkkkkkkkkk");
         if (allMatchesSB.length() > 0) {
             // Get markers of found Cloud URL Matches
             List<int[]> allMatchesMarkers = Utilities.getMatches(baseRequestResponse.getResponse(), uniqueMatches);
 
             // report the issue
-            System.out.println(">>>>>>>>>>>>>>here we go");
             sendNewIssue(baseRequestResponse,
                     "[JS Miner] API Endpoints (" + method + ")",
                     "The following API endpoints were found in a static file.",
