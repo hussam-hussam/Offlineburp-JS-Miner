@@ -61,14 +61,12 @@ public class Endpoints implements Runnable {
     }
 
     private static void reportFinding(IHttpRequestResponse baseRequestResponse, StringBuilder allMatchesSB, List<byte[]> uniqueMatches, String method) {
-        
-        
-        new PrintWriter(callbacks.getStdout(),true).println(">>>>>>>>>>>>>>>>>>>>>>>>>kkkkkkkkkkkkkkkkkkkkk");
         if (allMatchesSB.length() > 0) {
             // Get markers of found Cloud URL Matches
             List<int[]> allMatchesMarkers = Utilities.getMatches(baseRequestResponse.getResponse(), uniqueMatches);
 
             // report the issue
+            new PrintWriter(callbacks.getStdout(),true).println(">>>>>>>>>>>>>>>>>>>>>>>>>kkkkkkkkkkkkkkkkkkkkk");
             sendNewIssue(baseRequestResponse,
                     "[JS Miner] API Endpoints (" + method + ")",
                     "The following API endpoints were found in a static file.",
