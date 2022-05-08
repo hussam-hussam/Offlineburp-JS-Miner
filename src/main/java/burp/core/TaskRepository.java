@@ -117,19 +117,19 @@ public class TaskRepository {
     public void startTask(UUID taskId) {
         Task task = findTaskByUUID(taskId);
         task.setStatus(TaskStatus.RUNNING);
-        logTask(task);
+        //logTask(task);
     }
 
     public void completeTask(UUID taskId) {
         Task task = findTaskByUUID(taskId);
         task.setStatus(TaskStatus.COMPLETED);
-        logTask(task);
+        //logTask(task);
     }
 
     public void failTask(UUID taskId) {
         Task task = findTaskByUUID(taskId);
         task.setStatus(TaskStatus.FAILED);
-        logTask(task);
+        //logTask(task);
     }
 
     public void destroy(){
