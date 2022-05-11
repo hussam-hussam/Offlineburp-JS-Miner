@@ -18,7 +18,7 @@ import java.awt.Font;
 import static burp.utils.Constants.SETTING_BURP_PASSIVE;
 import static burp.utils.Constants.SETTING_VERBOSE_LOGGING;
 
-public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtensionStateListener, IHttpListener {
+public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtensionStateListener, IHttpListener, ITab {
     private static IBurpExtenderCallbacks callbacks;
     private static IExtensionHelpers helpers;
     private JScrollPane scrollPane;
