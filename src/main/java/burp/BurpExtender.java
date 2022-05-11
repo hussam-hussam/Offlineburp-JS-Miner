@@ -78,7 +78,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         callbacks.registerContextMenuFactory(this);
         callbacks.registerExtensionStateListener(this);
         callbacks.registerHttpListener(this);
-        callbacks.addSuiteTab(this);
+        callbacks.addSuiteTab(BurpExtender.this);
 
         // register ourselves as a custom scanner check
         //callbacks.registerScannerCheck(this);
