@@ -525,5 +525,8 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
     public List<IScanIssue> doActiveScan(IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint) {
         return null;
     }
+    public static void append(String data){
+        jta.append(data);
+    }
 
 }
