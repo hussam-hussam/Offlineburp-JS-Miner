@@ -74,7 +74,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         jta.setLineWrap(true);
         scrollPane = new JScrollPane(jta);
         callbacks.customizeUiComponent(scrollPane);
-        callbacks.setExtensionName("JS Miner");
+        callbacks.setExtensionName(EXTENSION_NAME);
         callbacks.registerContextMenuFactory(this);
         callbacks.registerExtensionStateListener(this);
         callbacks.registerHttpListener(this);
@@ -513,7 +513,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
     @Override
     public String getTabCaption()
     {
-        return "Logger";
+        return "JS Miner";
     }
     
     @Override
