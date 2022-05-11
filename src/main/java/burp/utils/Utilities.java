@@ -146,12 +146,15 @@ public final class Utilities {
             String severity,
             String confidence
     ) {
-        PrintWriter stdout = new PrintWriter(callbacks.getStdout(),true);
-        stdout.println("-------------------------------------------------------");
+        //PrintWriter stdout = new PrintWriter(callbacks.getStdout(),true);
+        //stdout.println("-------------------------------------------------------");
         String issue = new String("\r\n"+"URL: "+helpers.analyzeRequest(baseRequestResponse).getUrl().toString()+"\r\nIssue Name: "+issueName+"\r\nDescription: "+description+"\r\nSeverity: "+severity+"\r\nConfidence: "+confidence+"\r\nFindings:\r\n"+issueHighlight.replace("<li>","").replace("</li>","\r\n"));
-        stdout.println(issue);
-        stdout.println("-------------------------------------------------------");
-        BurpExtender.append("hello world");
+        //stdout.println(issue);
+        //stdout.println("-------------------------------------------------------");
+        BurpExtender.append("-------------------------------------------------------\n");
+        BurpExtender.append(issue);
+        BurpExtender.append("-------------------------------------------------------\n");
+        
         /*
         IScanIssue newCustomIssue = new CustomScanIssue(
                 baseRequestResponse.getHttpService(),
