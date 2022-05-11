@@ -12,6 +12,8 @@ import java.io.PrintWriter;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Component;
+import java.awt.Font;
 
 import static burp.utils.Constants.SETTING_BURP_PASSIVE;
 import static burp.utils.Constants.SETTING_VERBOSE_LOGGING;
@@ -19,6 +21,8 @@ import static burp.utils.Constants.SETTING_VERBOSE_LOGGING;
 public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtensionStateListener, IHttpListener {
     private static IBurpExtenderCallbacks callbacks;
     private static IExtensionHelpers helpers;
+    private JScrollPane scrollPane;
+    private JTextArea jta;
     private static final ExecutorServiceManager executorServiceManager = ExecutorServiceManager.getInstance();
     private static final TaskRepository taskRepository = TaskRepository.getInstance();
     private static final ExtensionConfig extensionConfig = ExtensionConfig.getInstance();
@@ -65,10 +69,16 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         BurpExtender.callbacks = callbacks;
         // Extension initializations
         helpers = callbacks.getHelpers();
+        jta = new JTextArea();
+        jta.setFont(new Font("Consolas", Font.PLAIN, 10));
+        jta.setLineWrap(true);
+        scrollPane = new JScrollPane(jta);
+        callbacks.customizeUiComponent(scrollPane);
         callbacks.setExtensionName(EXTENSION_NAME);
         callbacks.registerContextMenuFactory(this);
         callbacks.registerExtensionStateListener(this);
         callbacks.registerHttpListener(this);
+        callbacks.addSuiteTab(this);
 
         // register ourselves as a custom scanner check
         //callbacks.registerScannerCheck(this);
