@@ -510,6 +510,12 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         return null;
     }
 
+    @Override
+    public Component getUiComponent()
+    {
+        return scrollPane;
+    }
+    
     public List<IScanIssue> doActiveScan(IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint) {
         return null;
     }
