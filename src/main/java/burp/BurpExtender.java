@@ -22,7 +22,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
     private static IBurpExtenderCallbacks callbacks;
     private static IExtensionHelpers helpers;
     private JScrollPane scrollPane;
-    private JTextArea jta;
+    private static JTextArea jta;
     private static final ExecutorServiceManager executorServiceManager = ExecutorServiceManager.getInstance();
     private static final TaskRepository taskRepository = TaskRepository.getInstance();
     private static final ExtensionConfig extensionConfig = ExtensionConfig.getInstance();
