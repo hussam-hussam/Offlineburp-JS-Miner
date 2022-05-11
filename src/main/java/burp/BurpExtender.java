@@ -78,7 +78,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         callbacks.registerContextMenuFactory(this);
         callbacks.registerExtensionStateListener(this);
         callbacks.registerHttpListener(this);
-        callbacks.addSuiteTab(BurpExtender.this);
+        callbacks.addSuiteTab(this);
 
         // register ourselves as a custom scanner check
         //callbacks.registerScannerCheck(this);
@@ -494,8 +494,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
             updateExtensionConfig();
         }
     }
-
-    @Override
+    
     public List<IScanIssue> doPassiveScan(IHttpRequestResponse baseRequestResponse) {
         if (extensionConfig.isPassiveEnabled()) {
             new Thread(() -> {
@@ -511,16 +510,8 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         return null;
     }
 
-    @Override
     public List<IScanIssue> doActiveScan(IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint) {
         return null;
-    }
-
-    @Override
-    public int consolidateDuplicateIssues(IScanIssue existingIssue, IScanIssue newIssue) {
-        if (existingIssue.getIssueName().equals(newIssue.getIssueName()))
-            return -1;
-        else return 0;
     }
 
 }
