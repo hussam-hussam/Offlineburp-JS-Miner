@@ -509,7 +509,13 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         }
         return null;
     }
-
+    
+    @Override
+    public String getTabCaption()
+    {
+        return "Logger";
+    }
+    
     @Override
     public Component getUiComponent()
     {
