@@ -16,7 +16,7 @@ import java.util.List;
 import static burp.utils.Constants.SETTING_BURP_PASSIVE;
 import static burp.utils.Constants.SETTING_VERBOSE_LOGGING;
 
-public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtensionStateListener, IScannerCheck {
+public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtensionStateListener, IHttpListener {
     private static IBurpExtenderCallbacks callbacks;
     private static IExtensionHelpers helpers;
     private static final ExecutorServiceManager executorServiceManager = ExecutorServiceManager.getInstance();
@@ -68,9 +68,10 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         callbacks.setExtensionName(EXTENSION_NAME);
         callbacks.registerContextMenuFactory(this);
         callbacks.registerExtensionStateListener(this);
+        callbacks.registerHttpListener(this);
 
         // register ourselves as a custom scanner check
-        callbacks.registerScannerCheck(this);
+        //callbacks.registerScannerCheck(this);
 
         // obtain our output and error streams
         mStdOut = new PrintWriter(callbacks.getStdout(), true);
@@ -110,6 +111,17 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         executorServiceManager.getExecutorService().shutdownNow();
         mStdOut.println("[*] Extension was unloaded.");
         mStdOut.println("=================================================");
+    }
+    @Override
+    public void processHttpMessage(int toolFlag, boolean messageIsRequest, IHttpRequestResponse messageInfo)
+    {
+        // only process responses
+        if (!messageIsRequest)
+        {
+            if(this.callbacks.isInScope(helpers.analyzeRequest(messageInfo).getUrl())){
+                doPassiveScan(messageInfo);
+            }
+        }
     }
 
     /*
