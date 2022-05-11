@@ -74,7 +74,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         jta.setLineWrap(true);
         scrollPane = new JScrollPane(jta);
         callbacks.customizeUiComponent(scrollPane);
-        callbacks.setExtensionName(EXTENSION_NAME);
+        callbacks.setExtensionName("JS Miner");
         callbacks.registerContextMenuFactory(this);
         callbacks.registerExtensionStateListener(this);
         callbacks.registerHttpListener(this);
