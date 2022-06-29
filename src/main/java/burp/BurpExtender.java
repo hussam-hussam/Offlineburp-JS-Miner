@@ -77,7 +77,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         jta.setFont(new Font("Consolas", Font.PLAIN, 10));
         jta.setLineWrap(true);
         opendirdialog.setFont(new Font("Consolas", Font.PLAIN, 10));
-        opendirdialog.setLineWrap(true);
+        //opendirdialog.setLineWrap(true);
         execute.addActionListener(new ActionListener(){
             		public void actionPerformed(ActionEvent e){
             			new Thread(new MainRunner()).start();
