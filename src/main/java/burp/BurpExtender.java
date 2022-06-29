@@ -165,7 +165,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
             if(this.callbacks.isInScope(helpers.analyzeRequest(messageInfo).getUrl())){
                 contype=helpers.analyzeResponse(messageInfo.getResponse()).getStatedMimeType();
                 if(contype!=null){
-                    if(contype.toLowerCase().contains("script")||contype.toLowerCase().contains("json"))
+                    if(contype.toLowerCase().contains("script")||contype.toLowerCase().contains("json")||contype=="")
                         doPassiveScan(messageInfo);
                 }
                 else{
