@@ -188,7 +188,7 @@ public class ScannerBuilder2 {
         */
     }
 
-    private String getFileContents(String path){
+    private static String getFileContents(String path){
     try{
         Path fileName= Path.of(path);
         return Files.readString(fileName);
