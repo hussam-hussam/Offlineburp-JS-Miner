@@ -201,7 +201,7 @@ public class ScannerBuilder2 {
         String url = path;
         String requestResponse = getFileContents(path);
         if(requestResponse=="")return;
-        byte[] responseBodyHash = Utilities.getHTTPResponseBodyHash(requestResponse);
+        byte[] responseBodyHash = Utilities.getHTTPResponseBodyHash2(requestResponse);
         // Checks if Request URL & Response Body Hash were not scanned before
         if (BurpExtender.getTaskRepository().notDuplicate(taskName, url, responseBodyHash)) {
             UUID uuid = UUID.randomUUID();
