@@ -17,22 +17,23 @@ import static burp.utils.Utilities.sendNewIssue;
 public class SubDomains2 implements Runnable {
     private static final IBurpExtenderCallbacks callbacks = BurpExtender.getCallbacks();
     private static final IExtensionHelpers helpers = callbacks.getHelpers();
-    private final IHttpRequestResponse baseRequestResponse;
+    private final String baseRequestResponse;
+    private final String url;
     private final UUID taskUUID;
 
-    public SubDomains2(IHttpRequestResponse baseRequestResponse, UUID taskUUID) {
+    public SubDomains2(String url, String baseRequestResponse, UUID taskUUID) {
         this.baseRequestResponse = baseRequestResponse;
         this.taskUUID = taskUUID;
+        this.url = url;
     }
 
     @Override
     public void run() {
         BurpExtender.getTaskRepository().startTask(taskUUID);
 
-        String responseString = new String(baseRequestResponse.getResponse());
-        String responseBodyString = responseString.substring(helpers.analyzeResponse(baseRequestResponse.getResponse()).getBodyOffset());
-        String domainFromReferer = Utilities.getDomainFromReferer(baseRequestResponse);
-        String requestDomain = helpers.analyzeRequest(baseRequestResponse).getUrl().getHost();
+        String responseBodyString = baseRequestResponse;
+        String domainFromReferer = null;//Utilities.getDomainFromReferer(baseRequestResponse);
+        //String requestDomain = helpers.analyzeRequest(baseRequestResponse).getUrl().getHost();
         String rootDomain;
         // Try to get caller domain from Referer header (to avoid matching cdn subdomains, ..etc.)
         if (domainFromReferer != null) {
@@ -47,29 +48,26 @@ public class SubDomains2 implements Runnable {
             List<byte[]> uniqueMatches = new ArrayList<>();
             StringBuilder uniqueMatchesSB = new StringBuilder();
 
-            // Simple SubDomains Regex
+            // hostname matching
             Pattern subDomainsRegex = Pattern.compile("([a-z-0-9]+[.])+" + rootDomain, Pattern.CASE_INSENSITIVE);
             Matcher matcherSubDomains = subDomainsRegex.matcher(responseBodyString);
             while (matcherSubDomains.find() && BurpExtender.isLoaded()) {
-                if (
-                        Utilities.isMatchedDomainValid(matcherSubDomains.group(), rootDomain, requestDomain)
-                ) {
                     uniqueMatches.add(helpers.urlDecode(matcherSubDomains.group()).getBytes(StandardCharsets.UTF_8));
                     appendFoundMatches(helpers.urlDecode(matcherSubDomains.group()), uniqueMatchesSB);
-                }
             }
-            reportFinding(baseRequestResponse, uniqueMatchesSB, uniqueMatches);
+            //ip matching
+            reportFinding(url,baseRequestResponse, uniqueMatchesSB, uniqueMatches);
         }
         BurpExtender.getTaskRepository().completeTask(taskUUID);
     }
 
-    private static void reportFinding(IHttpRequestResponse baseRequestResponse, StringBuilder allMatchesSB, List<byte[]> uniqueMatches) {
+    private static void reportFinding(String url, String baseRequestResponse, StringBuilder allMatchesSB, List<byte[]> uniqueMatches) {
         if (allMatchesSB.length() > 0) {
             // Get markers of found Cloud URL Matches
             List<int[]> allMatchesMarkers = Utilities.getMatches(baseRequestResponse.getResponse(), uniqueMatches);
 
             // report the issue
-            sendNewIssue(baseRequestResponse,
+            sendNewIssue(url,
                     "[JS Miner] Subdomains",
                     "The following subdomains were found in a static file.",
                     allMatchesSB.toString(),
