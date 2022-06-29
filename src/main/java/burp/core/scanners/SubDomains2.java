@@ -32,18 +32,7 @@ public class SubDomains2 implements Runnable {
         BurpExtender.getTaskRepository().startTask(taskUUID);
 
         String responseBodyString = baseRequestResponse;
-        String domainFromReferer = null;//Utilities.getDomainFromReferer(baseRequestResponse);
-        //String requestDomain = helpers.analyzeRequest(baseRequestResponse).getUrl().getHost();
-        String rootDomain;
-        // Try to get caller domain from Referer header (to avoid matching cdn subdomains, ..etc.)
-        if (domainFromReferer != null) {
-            rootDomain = domainFromReferer;
-        } else {
-            // If the above failed, then use the domain from the HTTP request
-            rootDomain = Utilities.getRootDomain(requestDomain);
-        }
-
-        if (rootDomain != null) {
+        if (1) {
             // For reporting unique matches with markers
             List<byte[]> uniqueMatches = new ArrayList<>();
             StringBuilder uniqueMatchesSB = new StringBuilder();
