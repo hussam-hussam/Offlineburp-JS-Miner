@@ -6,6 +6,8 @@ import burp.IExtensionHelpers;
 import burp.IHttpRequestResponse;
 import burp.core.scanners.*;
 import burp.utils.Utilities;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import java.time.Instant;
 import java.util.Iterator;
@@ -27,7 +29,7 @@ public class ScannerBuilder2 {
     private static final IBurpExtenderCallbacks callbacks = BurpExtender.getCallbacks();
     private static final IExtensionHelpers helpers = callbacks.getHelpers();
 
-    private final IHttpRequestResponse[] baseRequestResponseArray;
+    private final String[] baseRequestResponseArray;
     private final int taskId;
     private final long timeStamp;
     private final boolean scanSecrets;
@@ -42,7 +44,7 @@ public class ScannerBuilder2 {
 
     public static class Builder {
         // Required parameters
-        private final IHttpRequestResponse[] baseRequestResponseArray;
+        private final String[] baseRequestResponseArray;
 
         // Optional parameters - initialized to default values
         private long timeStamp = Instant.now().toEpochMilli();
@@ -56,7 +58,7 @@ public class ScannerBuilder2 {
         private boolean dumpStaticFiles = false;
         private boolean endpointsFinder = false;
 
-        public Builder(IHttpRequestResponse[] baseRequestResponseArray) {
+        public Builder(String[] baseRequestResponseArray) {
             this.baseRequestResponseArray = baseRequestResponseArray;
         }
 
@@ -181,8 +183,19 @@ public class ScannerBuilder2 {
         */
     }
 
-    private static void scanVerifierExecutor(IHttpRequestResponse requestResponse, int taskId, TaskName taskName, long timeStamp, boolean isLastIterator) {
-        String url = helpers.analyzeRequest(requestResponse).getUrl().toString();
+    private String getFileContents(String path){
+    try{
+        Path fileName= Path.of(path);
+        return Files.readString(fileName);
+    }
+    catch(Exception e){
+        return "";
+        }
+    }
+    private static void scanVerifierExecutor(String path, int taskId, TaskName taskName, long timeStamp, boolean isLastIterator) {
+        String url = path;
+        String requestResponse = getFileContents(path);
+        if(requestResponse=="")return;
         byte[] responseBodyHash = Utilities.getHTTPResponseBodyHash(requestResponse);
         // Checks if Request URL & Response Body Hash were not scanned before
         if (BurpExtender.getTaskRepository().notDuplicate(taskName, url, responseBodyHash)) {
@@ -194,35 +207,35 @@ public class ScannerBuilder2 {
             switch (taskName){
                 case SECRETS_SCAN:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
-                            new Secrets(requestResponse, uuid));
+                            new Secrets(url, requestResponse, uuid));
                     break;
                 case DEPENDENCY_CONFUSION_SCAN:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
-                            new DependencyConfusion(requestResponse, uuid, true));
+                            new DependencyConfusion(url, requestResponse, uuid, true));
                     break;
                 case DEPENDENCY_CONFUSION_SCAN_2:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
-                            new DependencyConfusion(requestResponse, uuid, false));
+                            new DependencyConfusion(url, requestResponse, uuid, false));
                     break;
                 case SUBDOMAINS_SCAN:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
-                            new SubDomains(requestResponse, uuid));
+                            new SubDomains(url, requestResponse, uuid));
                     break;
                 case CLOUD_URLS_SCAN:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
-                            new CloudURLs(requestResponse, uuid));
+                            new CloudURLs(url, requestResponse, uuid));
                     break;
                 case INLINE_JS_SOURCE_MAPPER:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
-                            new InlineSourceMapFiles(requestResponse, uuid, timeStamp));
+                            new InlineSourceMapFiles(url, requestResponse, uuid, timeStamp));
                     break;
                 case SOURCE_MAPPER_ACTIVE_SCAN:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
-                            new ActiveSourceMapper(requestResponse, timeStamp, uuid));
+                            new ActiveSourceMapper(url, requestResponse, timeStamp, uuid));
                     break;
                 case STATIC_FILES_DUMPER:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
-                            new StaticFilesDumper(requestResponse, timeStamp, uuid, isLastIterator));
+                            new StaticFilesDumper(url, requestResponse, timeStamp, uuid, isLastIterator));
                     break;
                 /*
                 case ENDPOINTS_FINDER:
@@ -239,56 +252,56 @@ public class ScannerBuilder2 {
         }
     }
 
-    private static void runSecretsScan(IHttpRequestResponse[] baseRequestResponseArray, int taskId, long timeStamp) {
-        Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS_JSON);
-        for (IHttpRequestResponse requestResponse : uniqueRequests) {
-            scanVerifierExecutor(requestResponse, taskId, TaskName.SECRETS_SCAN, timeStamp, false);
+    private static void runSecretsScan(String[] baseRequestResponseArray, int taskId, long timeStamp) {
+        //Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS_JSON);
+        for (int i=0;i<baseRequestResponseArray.length;i++) {
+            scanVerifierExecutor(baseRequestResponseArray[i], taskId, TaskName.SECRETS_SCAN, timeStamp, false);
         }
     }
 
-    private static void runDependencyConfusionScan(IHttpRequestResponse[] baseRequestResponseArray, int taskId, long timeStamp) {
+    private static void runDependencyConfusionScan(String[] baseRequestResponseArray, int taskId, long timeStamp) {
         // run Dependency Confusion Regex for all JS/JSON files
-        Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS_JSON);
-        for (IHttpRequestResponse requestResponse : uniqueRequests) {
-            scanVerifierExecutor(requestResponse, taskId, TaskName.DEPENDENCY_CONFUSION_SCAN, timeStamp, false);
+        //Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS_JSON);
+        for (int i=0;i<baseRequestResponseArray.length;i++) {
+            scanVerifierExecutor(baseRequestResponseArray[i], taskId, TaskName.DEPENDENCY_CONFUSION_SCAN, timeStamp, false);
         }
 
         // For CSS files, don't run the regex (only check for disclosures like in '/node_modules/<pkg>')
-        Set<IHttpRequestResponse> uniqueRequestsCSS = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_CSS);
-        for (IHttpRequestResponse requestResponse : uniqueRequestsCSS) {
-            scanVerifierExecutor(requestResponse, taskId, TaskName.DEPENDENCY_CONFUSION_SCAN_2, timeStamp, false);
+        //Set<IHttpRequestResponse> uniqueRequestsCSS = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_CSS);
+        for (int i=0;i<baseRequestResponseArray.length;i++) {
+            scanVerifierExecutor(baseRequestResponseArray[i], taskId, TaskName.DEPENDENCY_CONFUSION_SCAN_2, timeStamp, false);
         }
     }
 
-    private static void runCloudURLsScan(IHttpRequestResponse[] baseRequestResponseArray, int taskId, long timeStamp) {
-        Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS_JSON);
-        for (IHttpRequestResponse requestResponse : uniqueRequests) {
-            scanVerifierExecutor(requestResponse, taskId, TaskName.CLOUD_URLS_SCAN, timeStamp, false);
+    private static void runCloudURLsScan(String[] baseRequestResponseArray, int taskId, long timeStamp) {
+        //Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS_JSON);
+        for (int i=0;i<baseRequestResponseArray.length;i++) {
+            scanVerifierExecutor(baseRequestResponseArray[i], taskId, TaskName.CLOUD_URLS_SCAN, timeStamp, false);
         }
     }
 
-    private static void runSubDomainsScan(IHttpRequestResponse[] baseRequestResponseArray, int taskId, long timeStamp) {
-        Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS_JSON);
-        for (IHttpRequestResponse requestResponse : uniqueRequests) {
-            scanVerifierExecutor(requestResponse, taskId, TaskName.SUBDOMAINS_SCAN, timeStamp, false);
+    private static void runSubDomainsScan(String[] baseRequestResponseArray, int taskId, long timeStamp) {
+        //Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS_JSON);
+        for (int i=0;i<baseRequestResponseArray.length;i++) {
+            scanVerifierExecutor(baseRequestResponseArray[i], taskId, TaskName.SUBDOMAINS_SCAN, timeStamp, false);
         }
     }
 
-    private static void runInlineSourceMapper(IHttpRequestResponse[] baseRequestResponseArray, int taskId, long timeStamp) {
-        Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS);
-        for (IHttpRequestResponse requestResponse : uniqueRequests) {
-            scanVerifierExecutor(requestResponse, taskId, TaskName.INLINE_JS_SOURCE_MAPPER, timeStamp, false);
+    private static void runInlineSourceMapper(String[] baseRequestResponseArray, int taskId, long timeStamp) {
+        //Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS);
+        for (int i=0;i<baseRequestResponseArray.length;i++) {
+            scanVerifierExecutor(baseRequestResponseArray[i], taskId, TaskName.INLINE_JS_SOURCE_MAPPER, timeStamp, false);
         }
     }
 
-    private static void runActiveSourceMapper(IHttpRequestResponse[] baseRequestResponseArray, int taskId, long timeStamp) {
-        Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS);
-        for (IHttpRequestResponse requestResponse : uniqueRequests) {
-            scanVerifierExecutor(requestResponse, taskId, TaskName.SOURCE_MAPPER_ACTIVE_SCAN, timeStamp, false);
+    private static void runActiveSourceMapper(String[] baseRequestResponseArray, int taskId, long timeStamp) {
+        //Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS);
+        for (int i=0;i<baseRequestResponseArray.length;i++) {
+            scanVerifierExecutor(baseRequestResponseArray[i], taskId, TaskName.SOURCE_MAPPER_ACTIVE_SCAN, timeStamp, false);
         }
     }
-
-    private static void runStaticFilesDumper(IHttpRequestResponse[] baseRequestResponseArray, int taskId, long timeStamp) {
+/*
+    private static void runStaticFilesDumper(String[] baseRequestResponseArray, int taskId, long timeStamp) {
         Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS_JSON_CSS_MAP);
         Iterator<IHttpRequestResponse> iterator = uniqueRequests.iterator();
         while (iterator.hasNext()) {
@@ -300,11 +313,11 @@ public class ScannerBuilder2 {
             scanVerifierExecutor(httpRequestResponse, taskId, TaskName.STATIC_FILES_DUMPER, timeStamp, isLastIterator);
         }
     }
-
-    private static void runEndpointsFinder(IHttpRequestResponse[] baseRequestResponseArray, int taskId, long timeStamp) {
-        Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS);
-        for (IHttpRequestResponse requestResponse : uniqueRequests) {
-            scanVerifierExecutor(requestResponse, taskId, TaskName.ENDPOINTS_FINDER, timeStamp, false);
+*/
+    private static void runEndpointsFinder(String[] baseRequestResponseArray, int taskId, long timeStamp) {
+        //Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS);
+        for (int i=0;i<baseRequestResponseArray.length;i++) {
+            scanVerifierExecutor(baseRequestResponseArray[i], taskId, TaskName.ENDPOINTS_FINDER, timeStamp, false);
         }
     }
 
@@ -312,7 +325,7 @@ public class ScannerBuilder2 {
     @Override
     public String toString() {
         return "Scan Information{" +
-                "RequestURL=" + Utilities.getURLPrefix(baseRequestResponseArray[0]) +
+                "RequestURL=" + baseRequestResponseArray[0] +
                 ", taskId=" + taskId +
                 ", timeStamp=" + timeStamp +
                 ", scanSecrets=" + scanSecrets +
