@@ -91,7 +91,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
                             String[] dirfiles = f.list();
                             new Thread(() -> {
                                long ts = Instant.now().toEpochMilli();
-                               ScannerBuilder2 scannerBuilder = new ScannerBuilder2.Builder(new String[]{dirfiles})
+                               ScannerBuilder2 scannerBuilder = new ScannerBuilder2.Builder(dirfiles)
                                    .runAllPassiveScans()
                                    .timeStamp(ts)
                                    .build();
@@ -163,7 +163,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         if (!messageIsRequest)
         {
             if(this.callbacks.isInScope(helpers.analyzeRequest(messageInfo).getUrl())){
-                contype=helpers.analyzeResponse(ihr.getResponse()).getStatedMimeType();
+                contype=helpers.analyzeResponse(messageIsRequest.getResponse()).getStatedMimeType();
                 if(contype!=null){
                     if(contype.toLowerCase().contains("script")||contype.toLowerCase().contains("json"))
                         doPassiveScan(messageInfo);
