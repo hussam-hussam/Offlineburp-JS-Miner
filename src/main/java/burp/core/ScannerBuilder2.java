@@ -128,7 +128,7 @@ public class ScannerBuilder2 {
         }
 
         public ScannerBuilder2 build() {
-            return new ScannerBuilder(this);
+            return new ScannerBuilder2(this);
         }
     }
 
