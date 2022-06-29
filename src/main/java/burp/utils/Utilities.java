@@ -116,7 +116,21 @@ public final class Utilities {
         return matches;
     }
 
-
+public static byte[] getHTTPResponseBodyHash2(String baseRequestResponse) {
+        if (baseRequestResponse != null) {
+            // Get bytes of Response content
+            byte[] responseBodyBytes = helpers.stringToBytes(baseRequestResponse);
+            MessageDigest digest = null;
+            try {
+                digest = MessageDigest.getInstance("SHA-256");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            return digest != null ? digest.digest(responseBodyBytes) : new byte[0];
+        } else {
+            return new byte[0];
+        }
+    }
     public static byte[] getHTTPResponseBodyHash(IHttpRequestResponse baseRequestResponse) {
         if (baseRequestResponse.getResponse() != null) {
             // Get bytes of Response content
