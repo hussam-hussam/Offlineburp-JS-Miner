@@ -4,6 +4,7 @@ import burp.config.ExecutorServiceManager;
 import burp.config.ExtensionConfig;
 import burp.core.TaskRepository;
 import burp.core.ScannerBuilder;
+import burp.core.ScannerBuilder2;
 import java.awt.GridLayout;
 import javax.swing.*;
 import java.io.File;
