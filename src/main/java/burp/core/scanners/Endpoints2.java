@@ -18,13 +18,13 @@ import static burp.utils.Constants.*;
 import static burp.utils.Utilities.appendFoundMatches;
 import static burp.utils.Utilities.sendNewIssue;
 
-public class Endpoints implements Runnable {
+public class Endpoints2 implements Runnable {
     private static final IBurpExtenderCallbacks callbacks = BurpExtender.getCallbacks();
     private static final IExtensionHelpers helpers = callbacks.getHelpers();
     private final IHttpRequestResponse baseRequestResponse;
     private final UUID taskUUID;
 
-    public Endpoints(IHttpRequestResponse baseRequestResponse, UUID taskUUID) {
+    public Endpoints2(IHttpRequestResponse baseRequestResponse, UUID taskUUID) {
         this.baseRequestResponse = baseRequestResponse;
         this.taskUUID = taskUUID;
     }
