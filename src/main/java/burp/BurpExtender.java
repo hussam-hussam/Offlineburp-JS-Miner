@@ -89,7 +89,14 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
                         try{  
                             //list all the files in directory
                             String[] dirfiles = f.list();
-                            System.out.println(dirfiles[0]);
+                            new Thread(() -> {
+                               long ts = Instant.now().toEpochMilli();
+                               ScannerBuilder2 scannerBuilder = new ScannerBuilder2.Builder(new String[]{dirfiles})
+                                   .runAllPassiveScans()
+                                   .timeStamp(ts)
+                                   .build();
+                               scannerBuilder.runScans();
+                            }).start();
                          }catch (Exception ex) {
                             JOptionPane.showMessageDialog(null, "please choose a valid file");ex.printStackTrace();
                         }                 
@@ -152,10 +159,18 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
     public void processHttpMessage(int toolFlag, boolean messageIsRequest, IHttpRequestResponse messageInfo)
     {
         // only process responses
+        String contype = null;
         if (!messageIsRequest)
         {
             if(this.callbacks.isInScope(helpers.analyzeRequest(messageInfo).getUrl())){
-                doPassiveScan(messageInfo);
+                contype=helpers.analyzeResponse(ihr.getResponse()).getStatedMimeType();
+                if(contype!=null){
+                    if(contype.toLowerCase().contains("script")||contype.toLowerCase().contains("json"))
+                        doPassiveScan(messageInfo);
+                }
+                else{
+                    doPassiveScan(messageInfo);
+                }
             }
         }
     }
@@ -522,7 +537,6 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
     }
     
     public List<IScanIssue> doPassiveScan(IHttpRequestResponse baseRequestResponse) {
-        if (extensionConfig.isPassiveEnabled()) {
             new Thread(() -> {
                 // run passive scans against JS/JSON files
                 long ts = Instant.now().toEpochMilli();
@@ -532,7 +546,6 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
                         .build();
                 scannerBuilder.runScans();
             }).start();
-        }
         return null;
     }
     
