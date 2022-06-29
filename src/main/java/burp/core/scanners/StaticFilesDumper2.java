@@ -21,7 +21,7 @@ import static burp.BurpExtender.mStdErr;
 import static burp.utils.Utilities.isDirEmpty;
 import static burp.utils.Utilities.trimURL;
 
-public class StaticFilesDumper implements Runnable {
+public class StaticFilesDumper2 implements Runnable {
     private static final IExtensionHelpers helpers = BurpExtender.getHelpers();
     private final IHttpRequestResponse baseRequestResponse;
     private Path outputDirectory; // where we are going to store the source files
@@ -29,7 +29,7 @@ public class StaticFilesDumper implements Runnable {
     private final UUID taskUUID;
     private final boolean isLastIterator;
 
-    public StaticFilesDumper(IHttpRequestResponse baseRequestResponse, long currentTimestamp, UUID taskUUID, boolean isLastIterator) {
+    public StaticFilesDumper2(IHttpRequestResponse baseRequestResponse, long currentTimestamp, UUID taskUUID, boolean isLastIterator) {
         this.isLastIterator = isLastIterator;
         this.baseRequestResponse = baseRequestResponse;
         this.taskUUID = taskUUID;
