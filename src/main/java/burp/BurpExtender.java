@@ -6,6 +6,7 @@ import burp.core.TaskRepository;
 import burp.core.ScannerBuilder;
 import java.awt.GridLayout;
 import javax.swing.*;
+import java.io.File;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
