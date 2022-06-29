@@ -48,14 +48,20 @@ public class SubDomains2 implements Runnable {
             List<byte[]> uniqueMatches = new ArrayList<>();
             StringBuilder uniqueMatchesSB = new StringBuilder();
 
-            // hostname matching
-            Pattern subDomainsRegex = Pattern.compile("([a-z-0-9]+[.])+" + rootDomain, Pattern.CASE_INSENSITIVE);
+            // ip matching
+            Pattern subDomainsRegex = Pattern.compile("[\"'/](([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])[\"'/]", Pattern.CASE_INSENSITIVE);
             Matcher matcherSubDomains = subDomainsRegex.matcher(responseBodyString);
             while (matcherSubDomains.find() && BurpExtender.isLoaded()) {
                     uniqueMatches.add(helpers.urlDecode(matcherSubDomains.group()).getBytes(StandardCharsets.UTF_8));
                     appendFoundMatches(helpers.urlDecode(matcherSubDomains.group()), uniqueMatchesSB);
             }
-            //ip matching
+            //hostname matching
+            Pattern subDomainsRegex = Pattern.compile("[\"'/](([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])[\"'/]", Pattern.CASE_INSENSITIVE);
+            Matcher matcherSubDomains = subDomainsRegex.matcher(responseBodyString);
+            while (matcherSubDomains.find() && BurpExtender.isLoaded()) {
+                    uniqueMatches.add(helpers.urlDecode(matcherSubDomains.group()).getBytes(StandardCharsets.UTF_8));
+                    appendFoundMatches(helpers.urlDecode(matcherSubDomains.group()), uniqueMatchesSB);
+            }
             reportFinding(url,baseRequestResponse, uniqueMatchesSB, uniqueMatches);
         }
         BurpExtender.getTaskRepository().completeTask(taskUUID);
