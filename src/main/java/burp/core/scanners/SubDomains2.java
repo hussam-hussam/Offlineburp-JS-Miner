@@ -12,7 +12,7 @@ import com.google.re2j.Pattern;
 
 import static burp.utils.Constants.*;
 import static burp.utils.Utilities.appendFoundMatches;
-import static burp.utils.Utilities.sendNewIssue;
+import static burp.utils.Utilities.sendNewIssue2;
 
 public class SubDomains2 implements Runnable {
     private static final IBurpExtenderCallbacks callbacks = BurpExtender.getCallbacks();
@@ -73,7 +73,7 @@ public class SubDomains2 implements Runnable {
             List<int[]> allMatchesMarkers = Utilities.getMatches(baseRequestResponse.getResponse(), uniqueMatches);
 
             // report the issue
-            sendNewIssue(url,
+            sendNewIssue2(url,
                     "[JS Miner] Subdomains",
                     "The following subdomains were found in a static file.",
                     allMatchesSB.toString(),
