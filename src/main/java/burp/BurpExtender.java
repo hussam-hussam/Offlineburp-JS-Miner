@@ -79,7 +79,9 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         opendirdialog.setFont(new Font("Consolas", Font.PLAIN, 10));
         //opendirdialog.setLineWrap(true);
         opendirdialog.addActionListener(new ActionListener(){
-            	//System.out.println("frfrfrfrfrfrf");
+            	public void actionPerformed(ActionEvent e){
+            			//new Thread(new MainRunner()).start();
+            	}
         });;
         scrollPane = new JScrollPane(jta);
         container.add(scrollPane);
