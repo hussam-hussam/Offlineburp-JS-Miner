@@ -138,7 +138,7 @@ public final class Utilities {
 
     // template issue for interesting stuff
     public static void sendNewIssue(
-            IHttpRequestResponse baseRequestResponse,
+            String url,
             String issueName,
             String description,
             String issueHighlight,
@@ -148,7 +148,7 @@ public final class Utilities {
     ) {
         //PrintWriter stdout = new PrintWriter(callbacks.getStdout(),true);
         //stdout.println("-------------------------------------------------------");
-        String issue = new String("\r\n"+"URL: "+helpers.analyzeRequest(baseRequestResponse).getUrl().toString()+"\r\nIssue Name: "+issueName+"\r\nDescription: "+description+"\r\nSeverity: "+severity+"\r\nConfidence: "+confidence+"\r\nFindings:\r\n"+issueHighlight.replace("<li>","").replace("</li>","\r\n"));
+        String issue = new String("\r\n"+"URL: "+url+"\r\nIssue Name: "+issueName+"\r\nDescription: "+description+"\r\nSeverity: "+severity+"\r\nConfidence: "+confidence+"\r\nFindings:\r\n"+issueHighlight.replace("<li>","").replace("</li>","\r\n"));
         //stdout.println(issue);
         //stdout.println("-------------------------------------------------------");
         BurpExtender.append("-------------------------------------------------------\n");
