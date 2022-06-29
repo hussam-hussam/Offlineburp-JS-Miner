@@ -212,23 +212,23 @@ public class ScannerBuilder2 {
             switch (taskName){
                 case SECRETS_SCAN:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
-                            new Secrets(url, requestResponse, uuid));
+                            new Secrets2(url, requestResponse, uuid));
                     break;
                 case DEPENDENCY_CONFUSION_SCAN:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
-                            new DependencyConfusion(url, requestResponse, uuid, true));
+                            new DependencyConfusion2(url, requestResponse, uuid, true));
                     break;
                 case DEPENDENCY_CONFUSION_SCAN_2:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
-                            new DependencyConfusion(url, requestResponse, uuid, false));
+                            new DependencyConfusion2(url, requestResponse, uuid, false));
                     break;
                 case SUBDOMAINS_SCAN:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
-                            new SubDomains(url, requestResponse, uuid));
+                            new SubDomains2(url, requestResponse, uuid));
                     break;
                 case CLOUD_URLS_SCAN:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
-                            new CloudURLs(url, requestResponse, uuid));
+                            new CloudURLs2(url, requestResponse, uuid));
                     break;
                 /*
                 case INLINE_JS_SOURCE_MAPPER:
