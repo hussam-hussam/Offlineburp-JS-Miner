@@ -88,7 +88,7 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
                         try{  
                             //list all the files in directory
                             String[] dirfiles = f.list();
-                            System.out.println(contents[0]);
+                            System.out.println(dirfiles[0]);
                          }catch (Exception ex) {
                             JOptionPane.showMessageDialog(null, "please choose a valid file");ex.printStackTrace();
                         }                 
