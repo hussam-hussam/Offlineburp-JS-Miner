@@ -16,14 +16,14 @@ import com.google.re2j.Matcher;
 import static burp.utils.Constants.*;
 import static burp.utils.Utilities.*;
 
-public class DependencyConfusion implements Runnable {
+public class DependencyConfusion2 implements Runnable {
     private static final IBurpExtenderCallbacks callbacks = BurpExtender.getCallbacks();
     private static final IExtensionHelpers helpers = callbacks.getHelpers();
     private final IHttpRequestResponse baseRequestResponse;
     private final UUID taskUUID;
     private final boolean findDependenciesWithRegex;
 
-    public DependencyConfusion(IHttpRequestResponse baseRequestResponse, UUID taskUUID, boolean findDependenciesWithRegex) {
+    public DependencyConfusion2(IHttpRequestResponse baseRequestResponse, UUID taskUUID, boolean findDependenciesWithRegex) {
         this.baseRequestResponse = baseRequestResponse;
         this.taskUUID = taskUUID;
         this.findDependenciesWithRegex = findDependenciesWithRegex;
