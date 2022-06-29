@@ -22,7 +22,9 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
     private static IBurpExtenderCallbacks callbacks;
     private static IExtensionHelpers helpers;
     private JScrollPane scrollPane;
+    private static JPanel container; 
     private static JTextArea jta;
+    private static JButton opendirdialog;
     private static final ExecutorServiceManager executorServiceManager = ExecutorServiceManager.getInstance();
     private static final TaskRepository taskRepository = TaskRepository.getInstance();
     private static final ExtensionConfig extensionConfig = ExtensionConfig.getInstance();
@@ -70,9 +72,20 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         // Extension initializations
         helpers = callbacks.getHelpers();
         jta = new JTextArea();
+        container = new JPanel(new GridLayout(2,1));
+        opendirdialog=new JButton("Select Folder");
         jta.setFont(new Font("Consolas", Font.PLAIN, 10));
         jta.setLineWrap(true);
+        opendirdialog.setFont(new Font("Consolas", Font.PLAIN, 10));
+        opendirdialog.setLineWrap(true);
+        execute.addActionListener(new ActionListener(){
+            		public void actionPerformed(ActionEvent e){
+            			new Thread(new MainRunner()).start();
+            	}
+        });;
         scrollPane = new JScrollPane(jta);
+        container.add(scrollPane);
+        container.add(opendirdialog);
         callbacks.customizeUiComponent(scrollPane);
         callbacks.setExtensionName(EXTENSION_NAME);
         callbacks.registerContextMenuFactory(this);
@@ -519,7 +532,8 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
     @Override
     public Component getUiComponent()
     {
-        return scrollPane;
+        //return scrollPane;
+        return container;
     }
     
     public List<IScanIssue> doActiveScan(IHttpRequestResponse baseRequestResponse, IScannerInsertionPoint insertionPoint) {
