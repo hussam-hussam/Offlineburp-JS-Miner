@@ -19,13 +19,16 @@ import static burp.utils.Utilities.*;
 public class DependencyConfusion2 implements Runnable {
     private static final IBurpExtenderCallbacks callbacks = BurpExtender.getCallbacks();
     private static final IExtensionHelpers helpers = callbacks.getHelpers();
-    private final IHttpRequestResponse baseRequestResponse;
+    private final String baseRequestResponse;
+    private final String url;
+    
     private final UUID taskUUID;
     private final boolean findDependenciesWithRegex;
 
-    public DependencyConfusion2(IHttpRequestResponse baseRequestResponse, UUID taskUUID, boolean findDependenciesWithRegex) {
+    public DependencyConfusion2(String url, String baseRequestResponse, UUID taskUUID, boolean findDependenciesWithRegex) {
         this.baseRequestResponse = baseRequestResponse;
         this.taskUUID = taskUUID;
+        this.url = url;
         this.findDependenciesWithRegex = findDependenciesWithRegex;
     }
 
@@ -36,9 +39,7 @@ public class DependencyConfusion2 implements Runnable {
         // For reporting unique matches with markers
         List<byte[]> uniqueMatches = new ArrayList<>();
         StringBuilder uniqueMatchesSB = new StringBuilder();
-
-        String responseString = new String(baseRequestResponse.getResponse());
-        String responseBodyString = responseString.substring(helpers.analyzeResponse(baseRequestResponse.getResponse()).getBodyOffset());
+        String responseBodyString = baseRequestResponse;
 
         // Removing unwanted spaces, new lines and so on, which might mislead matching our Regex
         Matcher dependenciesListMatcher = EXTRACT_DEPENDENCIES_REGEX.matcher(responseBodyString
@@ -84,12 +85,12 @@ public class DependencyConfusion2 implements Runnable {
         // Get matches & report all dependencies as info
         if (uniqueMatchesSB.length() > 0) {
             List<int[]> allDependenciesMatches = getMatches(baseRequestResponse.getResponse(), uniqueMatches);
-            reportDependencies(baseRequestResponse, uniqueMatchesSB.toString(), allDependenciesMatches);
-
+            reportDependencies(url, uniqueMatchesSB.toString(), allDependenciesMatches);
+            /*
             // Loop each identified package and check for Dependency Confusion
             for (NPMPackage npmPackage : uniquePackageNames) {
                 // Get markers of each single dependency with its version
-                List<int[]> depMatches = getMatches(baseRequestResponse.getResponse(), npmPackage.toString().getBytes());
+                List<int[]> depMatches = getMatches(helpers.stringToBytes(baseRequestResponse), npmPackage.toString().getBytes());
                 try {
                     if (isConnectionOK()) {
                         verifyDependencyConfusion(baseRequestResponse, npmPackage, depMatches);
@@ -102,6 +103,7 @@ public class DependencyConfusion2 implements Runnable {
                     e.printStackTrace();
                 }
             }
+            */
         } else {
             // if no NPM package names were found, then task is completed
             BurpExtender.getTaskRepository().completeTask(taskUUID);
@@ -122,7 +124,7 @@ public class DependencyConfusion2 implements Runnable {
         return false;
     }
 
-    private static void reportDependencies(IHttpRequestResponse baseRequestResponse, String dependenciesList, List<int[]> depMatches) {
+    private static void reportDependencies(String url, String dependenciesList, List<int[]> depMatches) {
         String findingTitle;
         String findingDetail;
         String severity;
@@ -131,7 +133,7 @@ public class DependencyConfusion2 implements Runnable {
         findingDetail = "The following dependencies were found in a static file.";
         severity = SEVERITY_INFORMATION;
 
-        sendNewIssue(baseRequestResponse,
+        sendNewIssue(url,
                 findingTitle,
                 findingDetail,
                 dependenciesList,
