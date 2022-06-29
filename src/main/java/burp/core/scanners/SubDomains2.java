@@ -32,7 +32,7 @@ public class SubDomains2 implements Runnable {
         BurpExtender.getTaskRepository().startTask(taskUUID);
 
         String responseBodyString = baseRequestResponse;
-        if (1) {
+        if (true) {
             // For reporting unique matches with markers
             List<byte[]> uniqueMatches = new ArrayList<>();
             StringBuilder uniqueMatchesSB = new StringBuilder();
