@@ -40,7 +40,7 @@ public class Secrets2 implements Runnable {
         StringBuilder uniqueMatchesSBHigh = new StringBuilder();
         while (matcherSecrets.find() && BurpExtender.isLoaded()) {
             double entropy = Utilities.getShannonEntropy(matcherSecrets.group(20)); // group(2) matches our secret
-            system.out.println("searching for secrets...........");
+            System.out.println("searching for secrets...........");
             if (entropy >= 3.5) {
                 // if high entropy, confidence is "Firm"
                 uniqueMatchesHigh.add(matcherSecrets.group().getBytes(StandardCharsets.UTF_8));
