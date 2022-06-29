@@ -16,11 +16,13 @@ import static burp.utils.Utilities.sendNewIssue;
 public class CloudURLs2 implements Runnable {
     private static final IBurpExtenderCallbacks callbacks = BurpExtender.getCallbacks();
     private static final IExtensionHelpers helpers = callbacks.getHelpers();
-    private final IHttpRequestResponse baseRequestResponse;
+    private final String baseRequestResponse;
+    private final String url;
     private final UUID taskUUID;
 
-    public CloudURLs2(IHttpRequestResponse baseRequestResponse, UUID taskUUID) {
+    public CloudURLs2(String url, String baseRequestResponse, UUID taskUUID) {
         this.baseRequestResponse = baseRequestResponse;
+        this.url = url;
         this.taskUUID = taskUUID;
     }
 
@@ -31,9 +33,7 @@ public class CloudURLs2 implements Runnable {
         // For reporting unique matches with markers
         List<byte[]> uniqueMatches = new ArrayList<>();
         StringBuilder uniqueMatchesSB = new StringBuilder();
-
-        String responseString = new String(baseRequestResponse.getResponse());
-        String responseBodyString = responseString.substring(helpers.analyzeResponse(baseRequestResponse.getResponse()).getBodyOffset());
+        String responseBodyString = baseRequestResponse;
 
         Matcher cloudURLsMatcher = CLOUD_URLS_REGEX.matcher(responseBodyString);
 
@@ -42,19 +42,19 @@ public class CloudURLs2 implements Runnable {
             appendFoundMatches(cloudURLsMatcher.group(), uniqueMatchesSB);
         }
 
-        reportFinding(baseRequestResponse, uniqueMatchesSB, uniqueMatches);
+        reportFinding(url,baseRequestResponse, uniqueMatchesSB, uniqueMatches);
 
         BurpExtender.getTaskRepository().completeTask(taskUUID);
 
     }
 
-    private static void reportFinding(IHttpRequestResponse baseRequestResponse, StringBuilder allMatchesSB, List<byte[]> uniqueMatches) {
+    private static void reportFinding(String url, String baseRequestResponse, StringBuilder allMatchesSB, List<byte[]> uniqueMatches) {
         if (allMatchesSB.length() > 0) {
             // Get markers of found Cloud URL Matches
-            List<int[]> allMatchesMarkers = Utilities.getMatches(baseRequestResponse.getResponse(), uniqueMatches);
+            List<int[]> allMatchesMarkers = Utilities.getMatches(helpers.stringToBytes(baseRequestResponse), uniqueMatches);
 
             // report the issue
-            sendNewIssue(baseRequestResponse,
+            sendNewIssue(url,
                     "[JS Miner] Cloud Resources",
                     "The following cloud URLs were found in a static file.",
                     allMatchesSB.toString(),
