@@ -12,13 +12,13 @@ import com.google.re2j.Matcher;
 import static burp.utils.Constants.*;
 import static burp.utils.Utilities.*;
 
-public class Secrets implements Runnable {
+public class Secrets2 implements Runnable {
     private static final IBurpExtenderCallbacks callbacks = BurpExtender.getCallbacks();
     private static final IExtensionHelpers helpers = callbacks.getHelpers();
     private final IHttpRequestResponse baseRequestResponse;
     private final UUID taskUUID;
 
-    public Secrets(IHttpRequestResponse baseRequestResponse, UUID taskUUID) {
+    public Secrets2(IHttpRequestResponse baseRequestResponse, UUID taskUUID) {
         this.baseRequestResponse = baseRequestResponse;
         this.taskUUID = taskUUID;
     }
