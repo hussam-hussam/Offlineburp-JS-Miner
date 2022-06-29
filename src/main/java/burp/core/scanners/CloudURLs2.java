@@ -11,7 +11,7 @@ import com.google.re2j.Matcher;
 
 import static burp.utils.Constants.*;
 import static burp.utils.Utilities.appendFoundMatches;
-import static burp.utils.Utilities.sendNewIssue;
+import static burp.utils.Utilities.sendNewIssue2;
 
 public class CloudURLs2 implements Runnable {
     private static final IBurpExtenderCallbacks callbacks = BurpExtender.getCallbacks();
