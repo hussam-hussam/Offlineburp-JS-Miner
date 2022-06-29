@@ -19,7 +19,7 @@ import static burp.utils.Constants.*;
 /**
  * Class to build and run specific scans. It also feeds data to TaskRepository.
  */
-public class ScannerBuilder {
+public class ScannerBuilder2 {
     private static final String[] EXTENSION_JS = {"js"};
     private static final String[] EXTENSION_JS_JSON = {"js", "json"};
     private static final String[] EXTENSION_CSS = {"css"};
@@ -127,12 +127,12 @@ public class ScannerBuilder {
             return this;
         }
 
-        public ScannerBuilder build() {
+        public ScannerBuilder2 build() {
             return new ScannerBuilder(this);
         }
     }
 
-    private ScannerBuilder(Builder builder) {
+    private ScannerBuilder2(Builder builder) {
         baseRequestResponseArray = builder.baseRequestResponseArray;
         taskId = builder.taskId;
         timeStamp = builder.timeStamp;
