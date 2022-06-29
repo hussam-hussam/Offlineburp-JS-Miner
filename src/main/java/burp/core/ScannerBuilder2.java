@@ -88,12 +88,14 @@ public class ScannerBuilder2 {
         }
 
         public Builder scanInlineSourceMapFiles() {
-            scanInlineSourceMapFiles = true;
+            //scanInlineSourceMapFiles = true;
+            scanInlineSourceMapFiles = false;
             return this;
         }
 
         public Builder activeSourceMapperScan() {
-            activeSourceMapperScan = true;
+            //activeSourceMapperScan = true;
+            activeSourceMapperScan = false;
             return this;
         }
 
@@ -103,12 +105,14 @@ public class ScannerBuilder2 {
         }
 
         public Builder dumpStaticFiles() {
-            dumpStaticFiles = true;
+            //dumpStaticFiles = true;
+            dumpStaticFiles = false;
             return this;
         }
 
         public Builder endpointsFinder() {
-            endpointsFinder = true;
+            //endpointsFinder = true;
+            endpointsFinder = false;
             return this;
         }
 
@@ -117,7 +121,8 @@ public class ScannerBuilder2 {
             scanSubDomains = true;
             scanSecrets = true;
             scanCloudURLs = true;
-            scanInlineSourceMapFiles = true;
+            //scanInlineSourceMapFiles = true;
+            scanInlineSourceMapFiles = false;
             //endpointsFinder = true;
             endpointsFinder = false;
             return this;
@@ -164,11 +169,11 @@ public class ScannerBuilder2 {
         if (scanSubDomains) {
             runSubDomainsScan(baseRequestResponseArray, taskId, timeStamp);
         }
-
+        /*
         if (scanInlineSourceMapFiles) {
             runInlineSourceMapper(baseRequestResponseArray, taskId, timeStamp);
         }
-
+        
         if (activeSourceMapperScan) {
             runActiveSourceMapper(baseRequestResponseArray, taskId, timeStamp);
         }
@@ -176,7 +181,7 @@ public class ScannerBuilder2 {
         if (dumpStaticFiles) {
             runStaticFilesDumper(baseRequestResponseArray, taskId, timeStamp);
         }
-        /*
+
         if (endpointsFinder) {
             runEndpointsFinder(baseRequestResponseArray, taskId, timeStamp);
         }
@@ -225,6 +230,7 @@ public class ScannerBuilder2 {
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
                             new CloudURLs(url, requestResponse, uuid));
                     break;
+                /*
                 case INLINE_JS_SOURCE_MAPPER:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
                             new InlineSourceMapFiles(url, requestResponse, uuid, timeStamp));
@@ -237,7 +243,7 @@ public class ScannerBuilder2 {
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
                             new StaticFilesDumper(url, requestResponse, timeStamp, uuid, isLastIterator));
                     break;
-                /*
+                
                 case ENDPOINTS_FINDER:
                     BurpExtender.getExecutorServiceManager().getExecutorService().submit(
                             new Endpoints(requestResponse, uuid));
@@ -286,7 +292,7 @@ public class ScannerBuilder2 {
             scanVerifierExecutor(baseRequestResponseArray[i], taskId, TaskName.SUBDOMAINS_SCAN, timeStamp, false);
         }
     }
-
+/*
     private static void runInlineSourceMapper(String[] baseRequestResponseArray, int taskId, long timeStamp) {
         //Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS);
         for (int i=0;i<baseRequestResponseArray.length;i++) {
@@ -300,7 +306,7 @@ public class ScannerBuilder2 {
             scanVerifierExecutor(baseRequestResponseArray[i], taskId, TaskName.SOURCE_MAPPER_ACTIVE_SCAN, timeStamp, false);
         }
     }
-/*
+
     private static void runStaticFilesDumper(String[] baseRequestResponseArray, int taskId, long timeStamp) {
         Set<IHttpRequestResponse> uniqueRequests = Utilities.querySiteMap(baseRequestResponseArray, EXTENSION_JS_JSON_CSS_MAP);
         Iterator<IHttpRequestResponse> iterator = uniqueRequests.iterator();
