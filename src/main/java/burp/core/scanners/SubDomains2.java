@@ -45,8 +45,8 @@ public class SubDomains2 implements Runnable {
                     appendFoundMatches(helpers.urlDecode(matcherSubDomains.group()), uniqueMatchesSB);
             }
             //hostname matching
-            Pattern subDomainsRegex = Pattern.compile("[\"'/](([a-zA-Z0-9]|[a-zA-Z0-9][-a-zA-Z0-9]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][-A-Za-z0-9]*[A-Za-z0-9])[\"'/]", Pattern.CASE_INSENSITIVE);
-            Matcher matcherSubDomains = subDomainsRegex.matcher(responseBodyString);
+            subDomainsRegex = Pattern.compile("[\"'/](([a-zA-Z0-9]|[a-zA-Z0-9][-a-zA-Z0-9]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][-A-Za-z0-9]*[A-Za-z0-9])[\"'/]", Pattern.CASE_INSENSITIVE);
+            matcherSubDomains = subDomainsRegex.matcher(responseBodyString);
             while (matcherSubDomains.find() && BurpExtender.isLoaded()) {
                     uniqueMatches.add(helpers.urlDecode(matcherSubDomains.group()).getBytes(StandardCharsets.UTF_8));
                     appendFoundMatches(helpers.urlDecode(matcherSubDomains.group()), uniqueMatchesSB);
@@ -59,7 +59,7 @@ public class SubDomains2 implements Runnable {
     private static void reportFinding(String url, String baseRequestResponse, StringBuilder allMatchesSB, List<byte[]> uniqueMatches) {
         if (allMatchesSB.length() > 0) {
             // Get markers of found Cloud URL Matches
-            List<int[]> allMatchesMarkers = Utilities.getMatches(baseRequestResponse.getResponse(), uniqueMatches);
+            List<int[]> allMatchesMarkers = Utilities.getMatches(helpers.stringToBytes(baseRequestResponse), uniqueMatches);
 
             // report the issue
             sendNewIssue2(url,
