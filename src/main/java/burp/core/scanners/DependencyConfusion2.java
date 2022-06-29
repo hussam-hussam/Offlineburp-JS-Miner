@@ -185,7 +185,7 @@ public class DependencyConfusion2 implements Runnable {
         }
 
         if (findingTitle != null) {
-            sendNewIssue2(url,
+            sendNewIssue(baseRequestResponse,
                     findingTitle,
                     findingDetail,
                     npmPackage.getNameWithVersion(),
