@@ -54,7 +54,7 @@ public class CloudURLs2 implements Runnable {
             List<int[]> allMatchesMarkers = Utilities.getMatches(helpers.stringToBytes(baseRequestResponse), uniqueMatches);
 
             // report the issue
-            sendNewIssue(url,
+            sendNewIssue2(url,
                     "[JS Miner] Cloud Resources",
                     "The following cloud URLs were found in a static file.",
                     allMatchesSB.toString(),
