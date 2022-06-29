@@ -61,7 +61,7 @@ public class Secrets2 implements Runnable {
                                       StringBuilder uniqueMatchesSBHigh, List<byte[]> uniqueMatchesHigh) {
         if (uniqueMatchesSBHigh.length() > 0) {
             List<int[]> secretsMatchesHigh = getMatches(helpers.stringToBytes(baseRequestResponse), uniqueMatchesHigh);
-            sendNewIssue(url,
+            sendNewIssue2(url,
                     "[JS Miner] Secrets / Credentials",
                     "The following secrets (with High entropy) were found in a static file.",
                     uniqueMatchesSBHigh.toString(),
@@ -73,7 +73,7 @@ public class Secrets2 implements Runnable {
 
         if (uniqueMatchesSBLow.length() > 0) {
             List<int[]> secretsMatchesLow = getMatches(helpers.stringToBytes(baseRequestResponse), uniqueMatchesLow);
-            sendNewIssue(url,
+            sendNewIssue2(url,
                     "[JS Miner] Secrets / Credentials",
                     "The following secrets (with Low entropy) were found in a static file.",
                     uniqueMatchesSBLow.toString(),
