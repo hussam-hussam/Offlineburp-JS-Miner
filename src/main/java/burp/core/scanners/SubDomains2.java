@@ -14,13 +14,13 @@ import static burp.utils.Constants.*;
 import static burp.utils.Utilities.appendFoundMatches;
 import static burp.utils.Utilities.sendNewIssue;
 
-public class SubDomains implements Runnable {
+public class SubDomains2 implements Runnable {
     private static final IBurpExtenderCallbacks callbacks = BurpExtender.getCallbacks();
     private static final IExtensionHelpers helpers = callbacks.getHelpers();
     private final IHttpRequestResponse baseRequestResponse;
     private final UUID taskUUID;
 
-    public SubDomains(IHttpRequestResponse baseRequestResponse, UUID taskUUID) {
+    public SubDomains2(IHttpRequestResponse baseRequestResponse, UUID taskUUID) {
         this.baseRequestResponse = baseRequestResponse;
         this.taskUUID = taskUUID;
     }
