@@ -80,9 +80,21 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
         //opendirdialog.setLineWrap(true);
         opendirdialog.addActionListener(new ActionListener(){
             	public void actionPerformed(ActionEvent e){
-            			//new Thread(new MainRunner()).start();
+            		JFileChooser fc=new JFileChooser();
+                    fc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY);
+                    int i=fc.showOpenDialog(null); 
+                    if(i==JFileChooser.APPROVE_OPTION){    
+                        File f=fc.getSelectedFile();   
+                        try{  
+                            //list all the files in directory
+                            String[] dirfiles = f.list();
+                            System.out.println(contents[0]);
+                         }catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "please choose a valid file");ex.printStackTrace();
+                        }                 
+                }
             	}
-        });;
+        });
         scrollPane = new JScrollPane(jta);
         container.add(scrollPane);
         container.add(opendirdialog);
