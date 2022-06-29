@@ -133,7 +133,7 @@ public class DependencyConfusion2 implements Runnable {
         findingDetail = "The following dependencies were found in a static file.";
         severity = SEVERITY_INFORMATION;
 
-        sendNewIssue(url,
+        sendNewIssue2(url,
                 findingTitle,
                 findingDetail,
                 dependenciesList,
@@ -185,7 +185,7 @@ public class DependencyConfusion2 implements Runnable {
         }
 
         if (findingTitle != null) {
-            sendNewIssue(baseRequestResponse,
+            sendNewIssue2(url,
                     findingTitle,
                     findingDetail,
                     npmPackage.getNameWithVersion(),
