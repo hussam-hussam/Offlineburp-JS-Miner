@@ -12,14 +12,14 @@ import java.util.UUID;
 
 import static burp.BurpExtender.mStdErr;
 
-public class ActiveSourceMapper implements Runnable {
+public class ActiveSourceMapper2 implements Runnable {
     private static final IBurpExtenderCallbacks callbacks = BurpExtender.getCallbacks();
     private static final IExtensionHelpers helpers = BurpExtender.getHelpers();
     private URL jsMapURL;
     private Path outputDirectory;
     private final UUID taskUUID;
 
-    public ActiveSourceMapper(IHttpRequestResponse requestResponse, long currentTimestamp, UUID taskUUID) {
+    public ActiveSourceMapper2(IHttpRequestResponse requestResponse, long currentTimestamp, UUID taskUUID) {
         URL jsURL = helpers.analyzeRequest(requestResponse).getUrl();
         this.taskUUID = taskUUID;
 
