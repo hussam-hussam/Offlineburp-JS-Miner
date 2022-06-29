@@ -84,7 +84,7 @@ public class DependencyConfusion2 implements Runnable {
 
         // Get matches & report all dependencies as info
         if (uniqueMatchesSB.length() > 0) {
-            List<int[]> allDependenciesMatches = getMatches(baseRequestResponse.getResponse(), uniqueMatches);
+            List<int[]> allDependenciesMatches = getMatches(helpers.stringToBytes(baseRequestResponse), uniqueMatches);
             reportDependencies(url, uniqueMatchesSB.toString(), allDependenciesMatches);
             /*
             // Loop each identified package and check for Dependency Confusion
