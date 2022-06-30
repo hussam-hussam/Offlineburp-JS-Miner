@@ -90,8 +90,8 @@ public class BurpExtender implements IBurpExtender, IContextMenuFactory, IExtens
                         try{  
                             //list all the files in directory
                             String[] dirfiles = f.listFiles();
-                            for(int i=0;i<dirfiles.length;i++){
-                            dirfiles[i]=f.getAbsolutePath()+File.pathSeparator+dirfiles[i];
+                            for(int j=0;j<dirfiles.length;j++){
+                            dirfiles[j]=f.getAbsolutePath()+File.pathSeparator+dirfiles[j];
                             }
                             new Thread(() -> {
                                long ts = Instant.now().toEpochMilli();
