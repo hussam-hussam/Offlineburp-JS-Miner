@@ -23,7 +23,7 @@ public class Secrets2 implements Runnable {
         this.baseRequestResponse = baseRequestResponse;
         this.url = url;
         this.taskUUID = taskUUID;
-        System.out.println("Secrets2 Builder.......");
+        //System.out.println("Secrets2 Builder.......");
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Secrets2 implements Runnable {
         StringBuilder uniqueMatchesSBHigh = new StringBuilder();
         while (matcherSecrets.find() && BurpExtender.isLoaded()) {
             double entropy = Utilities.getShannonEntropy(matcherSecrets.group(20)); // group(2) matches our secret
-            System.out.println("searching for secrets...........");
+            //System.out.println("searching for secrets...........");
             if (entropy >= 3.5) {
                 // if high entropy, confidence is "Firm"
                 uniqueMatchesHigh.add(matcherSecrets.group().getBytes(StandardCharsets.UTF_8));
