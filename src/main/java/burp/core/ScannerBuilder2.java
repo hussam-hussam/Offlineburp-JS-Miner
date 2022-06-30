@@ -199,11 +199,8 @@ public class ScannerBuilder2 {
     }
     private static void scanVerifierExecutor(String path, int taskId, TaskName taskName, long timeStamp, boolean isLastIterator) {
         String url = path;
-        System.out.println("the path is: "+path);
         String requestResponse = getFileContents(path);
-        System.out.println("we read the contents");
         if(requestResponse=="")return;
-        System.out.println(requestResponse);
         byte[] responseBodyHash = Utilities.getHTTPResponseBodyHash2(requestResponse);
         // Checks if Request URL & Response Body Hash were not scanned before
         if (BurpExtender.getTaskRepository().notDuplicate(taskName, url, responseBodyHash)) {
