@@ -190,8 +190,15 @@ public class ScannerBuilder2 {
 
     private static String getFileContents(String path){
     try{
-        Path fileName= Path.of(path);
-        return Files.readString(fileName);
+        //Path fileName= Path.of(path);
+        //return Files.readString(fileName);
+        StringBuilder builder = new StringBuilder();
+        BufferedReader buffer = new BufferedReader(new FileReader(path));
+        String str;
+        while ((str = buffer.readLine()) != null) {
+            builder.append(str).append("\n");
+        }
+        return builder.toString();
     }
     catch(Exception e){
         return "";
