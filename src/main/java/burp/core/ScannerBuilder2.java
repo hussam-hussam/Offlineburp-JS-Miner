@@ -8,7 +8,9 @@ import burp.core.scanners.*;
 import burp.utils.Utilities;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
+import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.time.Instant;
 import java.util.Iterator;
 import java.util.Set;
